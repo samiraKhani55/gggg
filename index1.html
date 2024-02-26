@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.110/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.110/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script type="module">
+    // Your access token can be found at: https://ion.cesium.com/tokens.
+    // This is the default access token from your ion account
+
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmYmUwZjdmNi0xYjIwLTQzNjEtYTk1ZS0yMzMwMzMwMzFlYWQiLCJpZCI6MTc0MDM0LCJpYXQiOjE2OTgzMDY3NDF9.UNohwzhCwacc5iQcsnhGaK3KmD07A913I4STtYui98E';
+
+    var viewer = new Cesium.Viewer("cesiumContainer");
+
+var center = Cesium.Cartesian3.fromDegrees(-103.0, 40.0);
+
+
+var radius = 250000.0;
+
+function getRadius() {
+
+return radius;
+
+}
+
+var redEllipse = viewer.entities.add({
+
+position: center,
+
+name : "Red ellipse on surface",
+
+ellipse : {
+
+semiMinorAxis : new Cesium.CallbackProperty(getRadius, false),
+
+semiMajorAxis : new Cesium.CallbackProperty(getRadius, false),
+
+material : Cesium.Color.RED.withAlpha(0.5)
+
+}
+
+});
+
+var moveHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
+moveHandler.setInputAction(function(movement) {
+
+var mousePosition = viewer.camera.pickEllipsoid(movement.endPosition, viewer.scene.globe.ellipsoid);
+
+radius = Cesium.Cartesian3.distance(center, mousePosition);
+
+}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+  
+
+
+
+var leftclickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
+leftclickHandler.setInputAction(function(result) {
+
+var worldPosition = viewer.scene.pickPosition(result.position);
+console.log(worldPosition)
+
+var carto = Cesium.Cartographic.fromCartesian(worldPosition);
+
+
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+var center2 = carto
+console.log(carto)
+console.log(center2)
+viewer.zoomTo(viewer.entities);
+  </script>
+ </div>
+</body>
+</html>
+
+

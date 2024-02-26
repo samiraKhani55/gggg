@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.110/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.110/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script type="module">
+Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmYmUwZjdmNi0xYjIwLTQzNjEtYTk1ZS0yMzMwMzMwMzFlYWQiLCJpZCI6MTc0MDM0LCJpYXQiOjE2OTgzMDY3NDF9.UNohwzhCwacc5iQcsnhGaK3KmD07A913I4STtYui98E';
+
+var viewer = new Cesium.Viewer("cesiumContainer");
+
+var leftclickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
+leftclickHandler.setInputAction(function(result) {
+
+var worldPosition = viewer.scene.pickPosition(result.position);
+console.log(worldPosition)
+var carto = Cesium.Cartographic.fromCartesian(worldPosition);
+
+var entity = viewer.entities.add({
+  position: worldPosition,
+  cylinder: {
+    length: 400000.0,
+    topRadius: 0.0,
+    bottomRadius: 200000.0,
+    material: Cesium.Color.RED,
+  },
+});
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+var rightclickHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
+rightclickHandler.setInputAction(function(resultRight) {
+
+var worldPositionRight = viewer.scene.pickPosition(resultRight.position);
+console.log(worldPositionRight)
+var cartoRight = Cesium.Cartographic.fromCartesian(worldPositionRight);
+
+var entity = viewer.entities.add({
+  position: worldPosition,
+  cylinder: {
+    length: 400000.0,
+    topRadius: 0.0,
+    bottomRadius: 200000.0,
+    material: Cesium.Color.RED,
+  },
+});
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+const redCone = viewer.entities.add({
+  name: "Red cone",
+  position: Cesium.Cartesian3.fromDegrees(-105.0, 40.0, 200000.0),
+  cylinder: {
+    length: 400000.0,
+    topRadius: 0.0,
+    bottomRadius: 200000.0,
+    material: Cesium.Color.RED,
+  },
+});
+
+viewer.zoomTo(viewer.entities);
+  </script>
+ </div>
+</body>
+</html>
+
+
